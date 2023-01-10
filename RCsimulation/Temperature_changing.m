@@ -1,4 +1,16 @@
+% Code By: Bernardo Pinto
+% This code defines the function Temperature_changing that calculates the time-varying change in temperature at a given time T. 
+% The temperature change is calculated based on three different cases:
+% 
+%     If T is less than the time at which the temperature jump (Tjump_start) occurs, the temperature is set to zero.
+%     If T is greater than Tjump_start but less than or equal to the end of the pulse (pulse_end), the temperature is calculated using an equation involving the parameters A0, alpha, kappa, mem_d, and mel_w. This equation represents a mathematical model for the temperature increase due to a pulse of heat being applied to the system.
+%     If T is greater than pulse_end, the temperature is calculated as the temperature at Tjump_start, minus a factor. This equation represents a mathematical model for the temperature increase after the heat pulse is applied to the system.
+%     If none of the above conditions are met, the temperature is set to zero.
+% 
+% The function Temperature_changing takes a single input argument T, and returns a single output T_timecourse, which represents the temperature at time T. The function uses several global variables that are defined elsewhere in the code.
+
 function [T_timecourse]= Temperature_changing (T)
+
 global A0
 global kappa
 global alpha
