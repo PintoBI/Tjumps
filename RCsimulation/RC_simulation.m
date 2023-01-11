@@ -1,10 +1,10 @@
 %Code By: Bernardo Pinto
 
-% This code simulates the temperature-dependent capacitance of a membrane circuit. 
-% The  variables defined at the beginning of the script specify the initial capacitance and the series resistance for the circuit, as well as the parameters for the heat generation and transfer in the system. 
+%This code simulates the temperature dependence of the membrane capacitance of a membrane circuit. 
+% The variables defined at the beginning of the script specify the initial capacitance and the series resistance for a capacitor and resistor in series circuit, as well as the parameters for the heat generation and transfer in the system. 
 % The time points for the temperature jump and the duration of the pulse are also defined.
 % 
-% This code set up and solves a system of differential equations to model the electrical circuit of the membrane, and then plotting the result.
+% This code sets up and solves numerically a system of differential equations to model the electrical circuit of the membrane, and then plotting the result.
 % Here is a brief description of what each block of code does:
 % 
 %- Several global variables are defined: C0, w, A0, kappa, alpha,mem_d,mel_w, Tjump_start, and pulse_end. These are needed for simulating the temperature jump and voltage across the capacitor.
@@ -16,7 +16,7 @@
 %     The capacitive current I_cap is calculated as the element-wise derivative of Vc divided by the element-wise derivative of time.
 %     The hilbert transform of I_cap is calculated and stored in H_I, and the hilbert transform of Vo is calculated and stored in H_V.
 %     The impedance is calculated as the element-wise ratio of H_V and H_I and stored in Impedance.
-%     The capacitance Cm is calculated as the negative reciprocal of the  product of the imaginary part of Impedance and angular frequency.
+%     The capacitance Cm is calculated as the negative reciprocal of the product of the imaginary part of Impedance and angular frequency.
 %     A figure is created and Cm and C_T are plotted against time for comparison. The y-axis limits are set to zoom in on the Tjump region.
 
 global C0
@@ -77,8 +77,16 @@ Impedance=H_V(2:end)./H_I;
 Cm=-(1./(w*imag(Impedance)));
 
 figure
-plot(time(2:end),Cm)
-hold
-plot(time,C_T)
+plot(time(2:end)*1000,Cm)
+hold on
+plot(time*1000,C_T)
+hold off
 
-axis([Tjump_start-10e-3 Tjump_start+2e-2 C0*0.98 C0*1.1])
+ax = gca; 
+set(gca,'box','off')
+set(gca, 'color', 'none','FontSize',12,'FontWeight','bold','FontName','Arial');
+legend('Capacitance by Hilbert','Change in Capacitance','location','best','FontSize',12,'box','off','FontWeight','bold','FontName','Arial')
+%set(gcf,'units','inches','position',[0,0,2.5,1.875])
+xlabel('Time (ms)')
+axis([(Tjump_start-10e-3)*1000 (Tjump_start+2e-2)*1000 C0*0.98 C0*1.1])
+ylabel('Capacitance (nF)')
